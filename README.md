@@ -171,7 +171,6 @@ JWT_SECRET=yourSuperSecret
 ## 🧑‍💻 Author
 
 **ExploitEngineer**
-📬 [exploitengineer@protonmail.com](mailto:exploitengineer@protonmail.com)
 🌐 [github.com/ExploitEngineer](https://github.com/ExploitEngineer)
 
 > “Backend isn't just about saving data; it's about building logic that powers the world behind the scenes.”
