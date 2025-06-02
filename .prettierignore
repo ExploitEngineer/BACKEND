@@ -1,11 +1,5 @@
-part3/node_modules
-part4/node_modules
-part5/node_modules
-part6/node_modules
+**/node_modules/
 
-part3/package-lock.json
-part4/package-lock.json
-part5/package-lock.json
-part6/package-lock.json
+**/package-lock.json/
 
 README.md
