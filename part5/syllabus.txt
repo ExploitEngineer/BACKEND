@@ -1,0 +1,10 @@
+from handling and working with the forms
+handle backend process of forms & making sure data coming from any frontend lib, fw, templating engines, we still handle it at the backend
+
+session & cookie
+hum log kuch bhi data frontend pr browser pr rakh skty han and jab bhi ap kuch bhi request backend par kro ga wo fronted saved data automatically backend pr chala jay ga
+
+session is the talk between client & server when client logout the session removed and when login back the new session comes
+
+
+tume to beja tha plain text but server ko mila blob which is not directly readable ab is chiz ko handle krna pry ga ka hum us blob ko wapis sa readable kr sakain
