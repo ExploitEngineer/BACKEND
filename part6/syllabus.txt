@@ -1,0 +1,17 @@
+hum log kai barr kuch routes dekhte han unme sirf ak hi hisa change hota hy jasy ka
+/auther/harsh
+/auther/whoami
+/auther/ExploitEngineer
+
+/profile/harsh
+/profile/me
+
+initialize a project with npm
+express install
+dynamic routing
+how to get data coming from frontend at backend route
+setting up parsers for form
+install ejs from npm
+setup ejs as a view engine
+setting up ejs for ejs pages
+setting up public static files
