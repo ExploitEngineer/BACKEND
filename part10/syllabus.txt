@@ -1,0 +1,13 @@
+Authentication & Authorization
+
+user ko profile deny sa phly ya check krna hota hy ka user ha kon - authentication
+
+rafay authorized to perform some tasks which are only allowed to be executed by the admin
+
+
+NOTE: Server har bar bhol jata hy ka ap kon ho, ab ku ka sever bhol jata hy ka ap kon ho to har baar wo har kam ka lya ap sa ponchay ga ap kon ho
+
+Cookies & Session
+i) how to set a cookie & read a cookie ?
+ii) how to use bcrypt for password encrytption & decryption ?
+iii) What is jwt & how to store & read a data from jwt ?
