@@ -4,6 +4,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("./models/user.model.js");
 const postModel = require("./models/post.model.js");
+const crypto = require("crypto");
+const path = require("path");
+const multer = require("multer");
 
 const app = express();
 
@@ -11,6 +14,20 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+const storage = multer.diskStorage({
+  destination: function (_, _, cb) {
+    cb(null, "./public/images/uploads");
+  },
+  filename: function (_, file, cb) {
+    crypto.randomBytes(12, function (_, bytes) {
+      const fn = bytes.toString("hex") + path.extname(file.originalname);
+      cb(null, fn);
+    });
+  },
+});
+
+const upload = multer({ storage: storage });
 
 app.get("/", (_, res) => {
   res.render("index");
@@ -137,6 +154,14 @@ app.post("/update/:id", async (req, res) => {
   } = req;
   await postModel.findOneAndUpdate({ _id: id }, { content });
   res.redirect("/profile");
+});
+
+app.get("/test", (_, res) => {
+  res.render("test");
+});
+
+app.post("/upload", upload.single("image"), (req, res) => {
+  console.log(req.file);
 });
 
 const PORT = process.env.PORT || 3000;
