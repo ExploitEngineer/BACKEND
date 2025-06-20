@@ -21,23 +21,27 @@ app.post("/register", async (req, res) => {
     body: { username, name, age, email, password },
   } = req;
 
-  let user = await userModel.findOne({ email });
-  if (user) return res.status(500).send("User already registered");
-
-  bcrypt.genSalt(10, (_, salt) => {
-    bcrypt.hash(password, salt, async (_, hash) => {
-      let user = await userModel.create({
-        username,
-        email,
-        age,
-        name,
-        password: hash,
+  try {
+    let user = await userModel.findOne({ email });
+    if (user) return res.status(500).send("User already registered");
+    bcrypt.genSalt(10, (_, salt) => {
+      bcrypt.hash(password, salt, async (_, hash) => {
+        let user = await userModel.create({
+          username,
+          email,
+          age,
+          name,
+          password: hash,
+        });
+        let token = jwt.sign({ email, userid: user._id }, "secret");
+        res.cookie("token", token);
+        res.send("registered");
       });
-      let token = jwt.sign({ email, userid: user._id }, "secret");
-      res.cookie("token", token);
-      res.send("registered");
     });
-  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server Error");
+  }
 });
 
 app.get("/login", (_, res) => {
@@ -86,19 +90,21 @@ function isLoggedIn(req, res, next) {
   next();
 }
 
-app.post("/post", isLoggedIn, async (req, _) => {
-  const {
-    user: { email },
-    body: { content },
-  } = req;
-  let user = await userModel.findOne({ email });
-  let post = await postModel.create({
-    user: user._id,
-    content,
-  });
+app.post("/post", isLoggedIn, async (req, res) => {
+  const { email } = req.user;
+  const { content } = req.body;
 
-  user.posts.push(post._id);
-  await user.save();
+  try {
+    const user = await userModel.findOne({ email });
+    const post = await postModel.create({ user: user._id, content });
+    user.posts.push(post._id);
+    await user.save();
+
+    res.redirect("/profile");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to create post");
+  }
 });
 
 app.get("/like/:id", isLoggedIn, async (req, res) => {
@@ -113,7 +119,24 @@ app.get("/like/:id", isLoggedIn, async (req, res) => {
     post.likes.splice(post.likes.indexOf(userid), 1);
   }
   await post.save();
-  res.redirect("profile");
+  res.redirect("/profile");
+});
+
+app.get("/edit/:id", isLoggedIn, async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  let post = await postModel.findOne({ _id: id }).populate("user");
+  res.render("edit", { post });
+});
+
+app.post("/update/:id", async (req, res) => {
+  const {
+    params: { id },
+    body: { content },
+  } = req;
+  await postModel.findOneAndUpdate({ _id: id }, { content });
+  res.redirect("/profile");
 });
 
 const PORT = process.env.PORT || 3000;
